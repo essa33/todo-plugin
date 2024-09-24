@@ -78,3 +78,9 @@ body {
     text-decoration: line-through;
     color: #888;
   }
+  
+  .timer {
+    margin-left: 10px;
+    font-size: 14px;
+    color: #555;
+  }

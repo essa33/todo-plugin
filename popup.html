@@ -6,9 +6,24 @@
 </head>
 <body>
   <h3>To-Do List</h3>
-  <input type="text" id="todoInput" placeholder="Add a new task...">
-  <button id="addTodo">Add Task</button>
-  <ul id="todoList"></ul>
+  <div>
+    <input type="text" id="todoInput" placeholder="Add a new task...">
+    <input type="text" id="descriptionInput" placeholder="Add a description...">
+    <input type="text" id="timeInput" placeholder="Estimated time (e.g., 1h, 30m, 2d)">
+    <button id="addTodo">Add Task</button>
+  </div>
+  <div style="display: flex; justify-content: space-between;">
+    <div>
+      <h3>Completed Tasks</h3>
+      <ul id="completedList"></ul>
+    </div>
+    <div>
+      <h3>To-Do List</h3>
+      <ul id="todoList"></ul>
+    </div>
+  </div>
+    
+  </div>
   <script src="popup.js"></script>
 </body>
 </html>
