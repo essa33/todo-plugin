@@ -22,9 +22,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (checkbox.checked) {
           todoList.removeChild(listItem);
           document.getElementById('completedList').appendChild(listItem);
+          clearInterval(timerInterval); // Stop the timer
+          const timeSpent = calculateTimeSpent(startTime);
+          timerSpan.textContent = `Time spent: ${timeSpent}`;
         } else {
           document.getElementById('completedList').removeChild(listItem);
           todoList.appendChild(listItem);
+          timerInterval = setInterval(() => updateTimer(timerSpan, endTime), 1000); // Restart the timer
         }
         saveTodos();
       });
@@ -34,10 +38,11 @@ document.addEventListener('DOMContentLoaded', () => {
   
       const timerSpan = document.createElement('span');
       timerSpan.className = 'timer';
+      const startTime = new Date(); // Store the start time
       const endTime = calculateEndTime(timeText);
+      timerSpan.dataset.startTime = startTime.toISOString(); // Store startTime as a string
       timerSpan.dataset.endTime = endTime.toISOString(); // Store endTime as a string
-      updateTimer(timerSpan, endTime);
-      setInterval(() => updateTimer(timerSpan, endTime), 1000);
+      let timerInterval = setInterval(() => updateTimer(timerSpan, endTime), 1000);
   
       taskSpan.addEventListener('dblclick', () => {
         const editInput = document.createElement('input');
@@ -65,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const deleteButton = document.createElement('button');
       deleteButton.textContent = 'Delete';
       deleteButton.addEventListener('click', () => {
+        clearInterval(timerInterval); // Stop the timer
         todoList.removeChild(listItem);
         saveTodos();
       });
@@ -79,6 +85,17 @@ document.addEventListener('DOMContentLoaded', () => {
       timeInput.value = '';
       saveTodos();
     }
+  }
+  
+  function calculateTimeSpent(startTime) {
+    const now = new Date();
+    const timeSpentMs = now - new Date(startTime);
+    const seconds = Math.floor((timeSpentMs / 1000) % 60);
+    const minutes = Math.floor((timeSpentMs / (1000 * 60)) % 60);
+    const hours = Math.floor((timeSpentMs / (1000 * 60 * 60)) % 24);
+    const days = Math.floor(timeSpentMs / (1000 * 60 * 60 * 24));
+    
+    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
   }
   
   function calculateEndTime(timeText) {
@@ -132,6 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
       todos.push({
         text: taskSpan.textContent,
         done: checkbox.checked,
+        startTime: timerSpan.dataset.startTime, // Ensure startTime is stored as a string
         endTime: timerSpan.dataset.endTime // Ensure endTime is stored as a string
       });
     });
@@ -143,6 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
       completedTodos.push({
         text: taskSpan.textContent,
         done: checkbox.checked,
+        startTime: timerSpan.dataset.startTime, // Ensure startTime is stored as a string
         endTime: timerSpan.dataset.endTime // Ensure endTime is stored as a string
       });
     });
@@ -168,9 +187,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (checkbox.checked) {
           todoList.removeChild(listItem);
           completedList.appendChild(listItem);
+          clearInterval(timerInterval); // Stop the timer
+          const timeSpent = calculateTimeSpent(todo.startTime);
+          timerSpan.textContent = `Time spent: ${timeSpent}`;
         } else {
           completedList.removeChild(listItem);
           todoList.appendChild(listItem);
+          timerInterval = setInterval(() => updateTimer(timerSpan, endTime), 1000); // Restart the timer
         }
         saveTodos();
       });
@@ -183,10 +206,17 @@ document.addEventListener('DOMContentLoaded', () => {
   
       const timerSpan = document.createElement('span');
       timerSpan.className = 'timer';
+      const startTime = new Date(todo.startTime); // Parse startTime back into a Date object
       const endTime = new Date(todo.endTime); // Parse endTime back into a Date object
+      timerSpan.dataset.startTime = startTime.toISOString(); // Store startTime as a string
       timerSpan.dataset.endTime = endTime.toISOString(); // Store endTime as a string
-      updateTimer(timerSpan, endTime);
-      setInterval(() => updateTimer(timerSpan, endTime), 1000);
+      let timerInterval;
+      if (!checkbox.checked) {
+        timerInterval = setInterval(() => updateTimer(timerSpan, endTime), 1000);
+      } else {
+        const timeSpent = calculateTimeSpent(startTime);
+        timerSpan.textContent = `Time spent: ${timeSpent}`;
+      }
   
       taskSpan.addEventListener('dblclick', () => {
         const editInput = document.createElement('input');
@@ -214,6 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const deleteButton = document.createElement('button');
       deleteButton.textContent = 'Delete';
       deleteButton.addEventListener('click', () => {
+        clearInterval(timerInterval); // Stop the timer
         todoList.removeChild(listItem);
         saveTodos();
       });
@@ -236,9 +267,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (checkbox.checked) {
           todoList.removeChild(listItem);
           completedList.appendChild(listItem);
+          clearInterval(timerInterval); // Stop the timer
+          const timeSpent = calculateTimeSpent(todo.startTime);
+          timerSpan.textContent = `Time spent: ${timeSpent}`;
         } else {
           completedList.removeChild(listItem);
           todoList.appendChild(listItem);
+          timerInterval = setInterval(() => updateTimer(timerSpan, endTime), 1000); // Restart the timer
         }
         saveTodos();
       });
@@ -251,10 +286,17 @@ document.addEventListener('DOMContentLoaded', () => {
   
       const timerSpan = document.createElement('span');
       timerSpan.className = 'timer';
+      const startTime = new Date(todo.startTime); // Parse startTime back into a Date object
       const endTime = new Date(todo.endTime); // Parse endTime back into a Date object
+      timerSpan.dataset.startTime = startTime.toISOString(); // Store startTime as a string
       timerSpan.dataset.endTime = endTime.toISOString(); // Store endTime as a string
-      updateTimer(timerSpan, endTime);
-      setInterval(() => updateTimer(timerSpan, endTime), 1000);
+      let timerInterval;
+      if (!checkbox.checked) {
+        timerInterval = setInterval(() => updateTimer(timerSpan, endTime), 1000);
+      } else {
+        const timeSpent = calculateTimeSpent(startTime);
+        timerSpan.textContent = `Time spent: ${timeSpent}`;
+      }
   
       taskSpan.addEventListener('dblclick', () => {
         const editInput = document.createElement('input');
@@ -282,6 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const deleteButton = document.createElement('button');
       deleteButton.textContent = 'Delete';
       deleteButton.addEventListener('click', () => {
+        clearInterval(timerInterval); // Stop the timer
         completedList.removeChild(listItem);
         saveTodos();
       });

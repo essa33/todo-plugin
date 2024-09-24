@@ -1,5 +1,7 @@
 body {
-    width: 300px;
+    width: 400px; /* Set the desired width */
+    height: 600px; /* Set the desired height */
+    overflow-y: auto; /* Enable scrolling if content overflows */
     padding: 10px;
     background-color: #f0f0f0; /* Light grey background color */
     font-family: Arial, sans-serif;
