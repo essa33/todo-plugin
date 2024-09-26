@@ -1,11 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "Change Background Color",
+  "name": "Todo List Extension",
   "version": "1.0",
-  "description": "A simple Chromium extension to change the background color of the current page.",
+  "description": "A simple todo list extension with time tracking",
   "permissions": [
     "activeTab",
-    "scripting"
+    "scripting",
+    "storage"
   ],
   "host_permissions": [
     "<all_urls>"
