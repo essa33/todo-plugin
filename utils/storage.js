@@ -1,10 +1,16 @@
 function saveTodos(todos, completedTodos) {
-    localStorage.setItem('todos', JSON.stringify(todos));
-    localStorage.setItem('completedTodos', JSON.stringify(completedTodos));
-  }
-  
-  function loadTodos() {
-    const todos = JSON.parse(localStorage.getItem('todos')) || [];
-    const completedTodos = JSON.parse(localStorage.getItem('completedTodos')) || [];
-    return { todos, completedTodos };
-  }
+  if (!Array.isArray(todos)) todos = [];
+  if (!Array.isArray(completedTodos)) completedTodos = [];
+  chrome.storage.sync.set({ todos, completedTodos });
+}
+
+function loadTodos() {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get(['todos', 'completedTodos'], (result) => {
+      resolve({
+        todos: Array.isArray(result.todos) ? result.todos : [],
+        completedTodos: Array.isArray(result.completedTodos) ? result.completedTodos : []
+      });
+    });
+  });
+}

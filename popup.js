@@ -1,17 +1,37 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('addTodo').addEventListener('click', addTodo);
-    const { todos, completedTodos } = loadTodos();
+    document.getElementById('openNewTab').addEventListener('click', openNewTab);
+    
+    await renderTodos();
+
+    // Listen for changes in chrome.storage
+    chrome.storage.onChanged.addListener((changes, namespace) => {
+        if (namespace === 'sync' && (changes.todos || changes.completedTodos)) {
+            renderTodos();
+        }
+    });
+});
+
+async function renderTodos() {
+    const { todos, completedTodos } = await loadTodos();
+    const todoList = document.getElementById('todoList');
+    const completedList = document.getElementById('completedList');
+
+    todoList.innerHTML = '';
+    completedList.innerHTML = '';
+
     todos.forEach(todo => {
-      const listItem = createTodoElement(todo, false);
-      document.getElementById('todoList').appendChild(listItem);
+        const listItem = createTodoElement(todo, false);
+        todoList.appendChild(listItem);
     });
+
     completedTodos.forEach(todo => {
-      const listItem = createTodoElement(todo, true);
-      document.getElementById('completedList').appendChild(listItem);
+        const listItem = createTodoElement(todo, true);
+        completedList.appendChild(listItem);
     });
-  });
-  
-  function addTodo() {
+}
+
+async function addTodo() {
     const todoInput = document.getElementById('todoInput');
     const descriptionInput = document.getElementById('descriptionInput');
     const timeInput = document.getElementById('timeInput');
@@ -33,6 +53,11 @@ document.addEventListener('DOMContentLoaded', () => {
       todoInput.value = '';
       descriptionInput.value = '';
       timeInput.value = '';
-      saveAllTodos();
+      await saveAllTodos();
+      await renderTodos();
     }
-  }
+}
+
+function openNewTab() {
+    chrome.tabs.create({url: 'newtab.html'});
+}
