@@ -22,3 +22,6 @@ Resources:
   [Chrome Extension Docs](https://developer.chrome.com/docs/extensions)
 
   [Mozilla Firefox Extensions](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions)
+
+## Links to published plugin :
+   [on Firefox](https://addons.mozilla.org/en-GB/firefox/addon/todo-list-extension/)
